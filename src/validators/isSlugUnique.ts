@@ -1,14 +1,14 @@
 import type {SlugIsUniqueValidator} from 'sanity'
-import type {SanityClient} from '@sanity/client'
 import {I18nDelimiter} from '../constants'
 import {getBaseIdFromId, serializePath} from '../utils'
 
 /*
  * most of this is taken from the deafultUnique function in @sanity/validation
  */
-export function createIsSlugUnique(client: SanityClient): SlugIsUniqueValidator {
+export function createIsSlugUnique(apiVersion = '2022-12-14'): SlugIsUniqueValidator {
   return (slug, context) => {
-    const {document, path, type} = context
+    const {document, path, type, getClient} = context
+    const client = getClient({apiVersion})
     const schemaOptions = type?.options as {disableArrayWarning?: boolean} | undefined
 
     if (!document) {
